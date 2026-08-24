@@ -1,0 +1,30 @@
+site_name: AeroBeat Web Documentation
+site_url: https://aerobeat-workouts.github.io/aerobeat-web-docs/
+repo_url: https://github.com/AeroBeat-Workouts/aerobeat-web-docs
+edit_uri: edit/main/docs/
+theme:
+  name: material
+  features:
+    - navigation.top
+    - content.code.copy
+  palette:
+    primary: teal
+    accent: purple
+plugins:
+  - search
+markdown_extensions:
+  - toc:
+      permalink: true
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - attr_list
+nav:
+  - Home: index.md
+  - Architecture:
+    - Web Polyrepo Architecture: architecture/web-polyrepo-architecture.md
+    - Secure Testbed Serving: architecture/secure-testbed-serving.md
+  - Contributors:
+    - Web Repo Map: contributors/web-repo-map.md
+    - Documentation Handoff: contributors/documentation-handoff.md
+
