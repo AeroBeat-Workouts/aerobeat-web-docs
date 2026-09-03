@@ -14,11 +14,15 @@ Camera testbed pages should check:
 
 Unsupported or failed states should render through normal `aero-*` UI components and include copyable context such as origin, browser family when detectable, scene name, and version label.
 
+## Secure Context Is A Routine Validation Gate
+
+Phone secure-context camera validation is current QA work, not a future expectation. Standard testbed `testbed:serve` commands and the assembly Tailscale HTTPS routes exist today, and physical Chromium/Android secure-context camera/calibration/playability handoffs are part of the cross-repo QA task for each release slice. Treat every camera-facing change as needing phone evidence through one of the HTTPS paths below before it is considered ready.
+
 ## Tailscale And Local HTTPS
 
 Preferred same-day phone path:
 
-- Use `tailscale cert` for a MagicDNS host.
+- Use `tailscale cert` for a MagicDNS host, or `tailscale serve` on an explicit AeroBeat HTTPS port. The current checkpoint keeps any existing `443` listener intact for other services and fronts AeroBeat on its own port (for example `tailscale serve --bg --https=8443`).
 - Serve the repo-local testbed over HTTPS.
 - Print the HTTPS phone URL, local URL, and QR code.
 

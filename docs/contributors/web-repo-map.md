@@ -2,31 +2,52 @@
 
 Use this map before opening a PR or assigning work. If a change crosses several domains, put shared shapes in `aerobeat-web-contracts` and keep implementation details in each owning repo.
 
-## Current First-Wave Repos
+## Current Repos
+
+These repositories exist with accepted, actively validated implementations:
 
 | Repo | Purpose |
 | --- | --- |
 | `aerobeat-web-contracts` | Shared service IDs, event names, element names, and public data shapes. |
-| `aerobeat-web-vendor-movenet` | TensorFlow.js/MoveNet isolation behind an AeroBeat adapter boundary. |
-| `aerobeat-web-cv` | Camera lifecycle, frame sources, pose-frame production, and vendor CV orchestration. |
-| `aerobeat-web-input` | Device-independent routing from pose/body data into gameplay-facing input events. |
+| `aerobeat-web-video` | Browser camera/video/replay media lifecycle, stream ownership, and media surface descriptors (`aero.video.media`). |
+| `aerobeat-web-cv` | Pose-frame production above the video facade, vendor-neutral CV orchestration, and phone-testable performance presets. |
+| `aerobeat-web-input` | Device-independent routing from calibrated pose/body-grid data into gameplay-facing input evidence. |
 | `aerobeat-web-style` | Design tokens, CSS variables, base styles, and theme primitives. |
-| `aerobeat-web-ui` | Native `aero-*` Web Components, calibration screens, HUD, menus, and testbed UI. |
+| `aerobeat-web-ui` | Native `aero-*` Web Components: calibration screens, content-discovery presenters, gameplay HUDs, Visual Test transport, and testbed UI. |
+| `aerobeat-web-audio` | Per-game Web Audio playback, authoritative clock snapshots, timeline sync, and beat/time conversion. |
+| `aerobeat-web-renderer` | PlayCanvas gameplay renderer (`aero.renderer.playcanvas`) with pinned canonical GLB assets, bounded feedback, landmark overlays, and debug camera controls. |
+| `aerobeat-web-gameplay` | Deterministic session coordinator: mode rules, hit windows, scoring, and Boxing/Flow judgement. |
+| `aerobeat-web-content` | Validated song-package loading, hash verification, runtime variant resolution, and content loading boundaries. |
+| `aerobeat-web-content-authoring` | Provider-neutral browser conversion, IndexedDB authoring persistence, and deterministic `AEROPKG1` package export. |
+| `aerobeat-web-assembly` | Deployable `<aero-game>` app shell, service wiring, media-lease arbitration, Test/Visual Test presentation modes, and release artifacts. |
 
-## Future Or Adjacent Repos
+## Vendor Repos
+
+Third-party runtime dependencies stay isolated behind AeroBeat-owned adapter boundaries. Production CV composes only the MediaPipe adapter; MoveNet and ONNX Runtime remain research/reference adapters that release proof rejects, and BeatSaver acquisition is provider-side only:
 
 | Repo | Purpose |
 | --- | --- |
-| `aerobeat-web-assembly` | Deployable app shell, service wiring, integration flows, and release artifacts. |
-| `aerobeat-web-audio` | Web Audio clock, song playback, timeline sync, and beat/time conversion. |
-| `aerobeat-web-renderer` | WebGL2 gameplay renderer, target visuals, effects, and debug overlays. |
-| `aerobeat-web-gameplay` | Mode rules, hit windows, scoring, and Boxing/Flow gameplay logic. |
-| `aerobeat-web-content` | Canonical map/event fixtures, converted content, and content loading boundaries. |
+| `aerobeat-web-vendor-movenet` | TensorFlow.js/MoveNet adapter boundary (research/reference path). |
+| `aerobeat-web-vendor-mediapipe` | MediaPipe Tasks Vision Pose Landmarker adapter boundary; the only vendor composed into production CV. |
+| `aerobeat-web-vendor-onnxruntime` | ONNX Runtime Web + RTMPose-t evaluation adapter boundary (research/reference path). |
+| `aerobeat-web-vendor-beatsaver` | BeatSaver acquisition, provider-hash verification, and untrusted ZIP inspection behind neutral source-manifest contracts. |
+
+## Planned Repos
+
+These domains are routed in the root README matrix but have no repository yet; confirm with the orchestrator before assuming one exists:
+
+| Repo | Purpose |
+| --- | --- |
 | `aerobeat-web-performance` | Frame budgets, diagnostics, quality levels, and adaptive performance policy. |
 | `aerobeat-web-assets` | Product-owned static assets and asset manifests. |
 | `aerobeat-web-config` | Environment profiles, feature flags, and runtime/build configuration. |
 | `aerobeat-web-tools` | Generators, validators, conversion helpers, and repo tooling. |
-| `aerobeat-web-docs` | Public-facing web architecture and contributor docs. |
+
+## This Docs Repo
+
+| Repo | Purpose |
+| --- | --- |
+| `aerobeat-web-docs` | Public-facing web architecture and contributor docs for the web family. |
 
 ## Contributor Checklist
 
@@ -38,4 +59,3 @@ Before editing a web repo:
 4. Import sibling repos only through declared public `@aerobeat/web-*` exports.
 5. Run the target repo's validation commands before handoff.
 6. Mirror accepted cross-repo decisions into `aerobeat-web-docs` when they become contributor-facing.
-

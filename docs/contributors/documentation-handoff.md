@@ -12,6 +12,8 @@ Mirror or summarize a decision in this repo when it:
 - defines a public API, service, event, or data-shape rule after it is accepted
 - changes secure testbed serving, release posture, or browser validation rules
 
+Multi-repo surfaces in the current family include the video/CV media lifecycle split, the content pipeline across content-authoring and content, and the vendor adapter boundaries.
+
 ## Keep It Repo-Local
 
 Keep documentation in the implementation repo when it:

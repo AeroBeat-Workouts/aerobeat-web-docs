@@ -29,11 +29,13 @@ Use the owning repo for the domain being changed:
 | Design tokens, CSS variables, reset/base styles, theme primitives | `aerobeat-web-style` |
 | Web Components, HUD, menus, calibration UI, settings UI | `aerobeat-web-ui` |
 | Replay/fake pose input, device-independent input routing, gameplay-facing input events | `aerobeat-web-input` |
-| Camera lifecycle, pose-frame production, vendor CV orchestration | `aerobeat-web-cv` |
+| Browser camera/video/replay media lifecycle, stream ownership, and media surface descriptors | `aerobeat-web-video` |
+| Pose-frame production and vendor CV orchestration | `aerobeat-web-cv` |
 | Web Audio clock, song playback, timeline sync | `aerobeat-web-audio` |
-| WebGL2 gameplay renderer, visuals, debug overlays | `aerobeat-web-renderer` |
+| PlayCanvas gameplay renderer, visuals, debug overlays | `aerobeat-web-renderer` |
 | Mode rules, hit windows, scoring, Flow and Boxing logic | `aerobeat-web-gameplay` |
 | Canonical map/event fixtures, converted content, content loading boundaries | `aerobeat-web-content` |
+| Browser content conversion, authoring persistence, and deterministic package export | `aerobeat-web-content-authoring` |
 | Frame budgets, quality levels, diagnostics, adaptive performance policy | `aerobeat-web-performance` |
 | Product-owned static assets and asset manifests | `aerobeat-web-assets` |
 | Environment profiles, feature flags, runtime/build config | `aerobeat-web-config` |
@@ -61,7 +63,7 @@ Exceptions:
 
 - `aerobeat-web-assembly` keeps root-level app dependencies, demos, tests, Vite config, and release scripts because it is the deployable product shell.
 - `aerobeat-web-docs` uses a docs-native authoring, preview, and hosting shape.
-- Forked vendor repos preserve upstream layout. AeroBeat wrapper repos above them own normalized AeroBeat APIs.
+- Forked vendor repos preserve upstream layout. AeroBeat wrapper repos above them own normalized AeroBeat APIs. No current web vendor repo uses the forked shape; all four web vendor repos (`vendor-mediapipe`, `vendor-movenet`, `vendor-onnxruntime`, `vendor-beatsaver`) are AeroBeat-authored adapter shapes.
 
 ## Web Component Rules
 
@@ -71,21 +73,23 @@ Screens and testbed scenes may own layout and composition, but visible controls,
 
 Tests or static validators must enforce the component-only screen/scene rule. Review preference alone is not enough.
 
-## First Wave
+## Repo Family
 
-The first web repo wave after templates and contracts is focused on mobile/desktop input proof, not full product assembly:
+The original first web repo wave focused on mobile/desktop input proof: `aerobeat-web-vendor-movenet`, `aerobeat-web-cv`, `aerobeat-web-input`, `aerobeat-web-style`, and `aerobeat-web-ui`. That wave shipped, and the family has grown past input proving into a full product runtime.
 
-- `aerobeat-web-vendor-movenet`
-- `aerobeat-web-cv`
-- `aerobeat-web-input`
-- `aerobeat-web-style`
-- `aerobeat-web-ui`
+Current implementation repos:
 
-This wave should preserve the legacy proving posture: live camera, video/replay/fixture sources, visible debug state, Boxing and Flow proving scenes, camera selection persistence, and regression tests. Web scenes replace Godot scenes with `.testbed/scenes/*.scene.html` built from `aero-*` components.
+- `aerobeat-web-contracts` owns shared service IDs, event names, element names, and data shapes.
+- `aerobeat-web-style`, `aerobeat-web-ui`, `aerobeat-web-input`, `aerobeat-web-cv`, and `aerobeat-web-video` carry the browser input/CV/media surfaces.
+- `aerobeat-web-audio`, `aerobeat-web-renderer`, `aerobeat-web-gameplay`, `aerobeat-web-content`, `aerobeat-web-content-authoring`, and `aerobeat-web-assembly` carry the product runtime: song clock, PlayCanvas presentation, scoring judgement, content pipeline, conversion/authoring/export, and the deployable shell.
+- `aerobeat-web-vendor-mediapipe` is the only production-composed pose vendor; `aerobeat-web-vendor-movenet`, `aerobeat-web-vendor-onnxruntime`, and `aerobeat-web-vendor-beatsaver` remain separate research/reference or provider-acquisition adapters and are not CV dependencies. Production release proof rejects MoveNet, TensorFlow pose, ONNX Runtime, and ONNX model assets.
+- `aerobeat-web-performance`, `aerobeat-web-assets`, `aerobeat-web-config`, and `aerobeat-web-tools` remain planned domains with no repos created yet; their routing rows above are forward-looking.
+
+Web scenes replace Godot scenes with `.testbed/scenes/*.scene.html` built from `aero-*` components. The proving posture from the first wave still applies to testbeds: live camera, video/replay/fixture sources, visible debug state, Boxing and Flow proving scenes, camera selection persistence, and regression tests.
 
 ## Release Posture
 
-Repo-local testbeds are for rapid iteration. `aerobeat-web-assembly` owns product release artifacts and should prove raw `0.0.1` artifact creation and GitHub release submission wiring before minified builds or future machine-dependent bytecode outputs.
+Repo-local testbeds are for rapid iteration. `aerobeat-web-assembly` owns product release artifacts and already proves raw artifact creation and GitHub release submission wiring. Its current deterministic raw release proof is `0.0.33`; every `0.0.32` and older release byte remains immutable, and reproducible npm-pack normalize/verify policy guards each new release. The renderer package owns the pinned canonical gameplay asset set (`0.0.2`), and assembly owns its versioned environment payloads with hashes; release builds consume those pinned identities rather than loose assets.
 
 Do not host or redistribute unlicensed music content.
 
