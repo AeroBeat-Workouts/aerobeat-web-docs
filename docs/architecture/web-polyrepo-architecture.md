@@ -89,7 +89,7 @@ Web scenes replace Godot scenes with `.testbed/scenes/*.scene.html` built from `
 
 ## Release Posture
 
-Repo-local testbeds are for rapid iteration. `aerobeat-web-assembly` owns product release artifacts and already proves raw artifact creation and GitHub release submission wiring. Its current deterministic raw release proof is `0.0.33`; every `0.0.32` and older release byte remains immutable, and reproducible npm-pack normalize/verify policy guards each new release. The renderer package owns the pinned canonical gameplay asset set (`0.0.2`), and assembly owns its versioned environment payloads with hashes; release builds consume those pinned identities rather than loose assets.
+Repo-local testbeds are for rapid iteration. `aerobeat-web-assembly` owns product release artifacts and proves raw artifact creation and GitHub release submission wiring. Every release it publishes carries a deterministic raw release proof, every prior release byte remains immutable, and a reproducible npm-pack normalize/verify policy guards each new release. The renderer package owns the canonical gameplay asset set pinned at a specific version, and assembly owns versioned environment payloads with hashes; release builds consume those pinned identities rather than loose assets. Current proof and pinned asset versions live in the `aerobeat-web-assembly` release history and the renderer's pinned asset manifest, not in this page.
 
 Do not host or redistribute unlicensed music content.
 
