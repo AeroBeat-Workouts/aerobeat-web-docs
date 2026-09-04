@@ -52,7 +52,7 @@ Scope boundaries: edit only in-repo pages plus `mkdocs.yml` nav if needed; no ne
 **Objective:** Execute `/home/derrick/.dsh/projects/aerobeat/aerobeat-web-docs/.plans/2026-09-02-web-docs-direction-refresh.md` in `/home/derrick/.dsh/projects/aerobeat/aerobeat-web-docs` for the docs-refresh Beads. Milestones: [pending] 1) drift audit across web repos; [pending] 2) refresh architecture pages; [pending] 3) refresh contributor/index pages; [pending] 4) QA strict build and consistency pass; [pending] 5) commit, push, audit verification. Complete when the plan is updated, `mkdocs build --strict` passes, completed Beads are closed, and intentional changes are committed/pushed to `origin/main`; block only when the same concrete blocker persists across the configured goal rounds.
 **DSH Task List Mirror:** Created (all pending)
 **Max Goal Rounds:** Deployment default
-**Continuation Status:** Not Started (gated on approval)
+**Continuation Status:** Complete (goal closed by orchestrator after all milestones verified)
 
 ---
 
@@ -115,17 +115,29 @@ Scope boundaries: edit only in-repo pages plus `mkdocs.yml` nav if needed; no ne
 ### Task 5: Commit, push, audit verification
 
 **Bead ID:** `aerobeat-web-docs-div`
-**SubAgent:** orchestrator commit + standalone `subagent` audit
+**SubAgent:** orchestrator commit `d3cdc4d` + push `bf0a376..d3cdc4d main -> main` (status clean vs origin/main) + standalone `subagent` audit `6d8da766-d972-4cf8-955d-47e9c8436e24` — FAILED after ~2h with empty closing message (server-side long-prefill kill, since fixed by Derrick to a 1-hour cap). Reconciled: no beads closed, no file edits beyond orchestrator-owned plan record. Retired; idempotent retry launched `0d97dbdb-f5f3-4fb0-a4f1-fc28d2025ff3` (verified running) with incremental-report instruction so partial results survive. That child then terminated abnormally fast after only announcing skill loading (no checks run, no closures, no edits — reconciled same as before); resumed via `send_message` continuation on the same child (delivery confirmed) rather than relaunching. That child reported chunks 1–5 PASS-with-caveat incrementally but was interrupted before closures; orchestrator session also interrupted; closure instruction re-queued to the same child after reconciliation (`cwr/vzt/scj` in_progress, `div` claimed, `yb5` closed, follow-up `fiq` open).
 **Role:** `orchestrator`, `auditor`
 **References:** all REFs, final diff
 **Prompt (orchestrator):** On QA pass, commit the intentional docs changes and push to `origin/main`; verify with `git status --short --branch`. **Prompt (auditor):** Independently verify final diff against plan tasks, Beads state, findings coverage, commit/push status, and absence of secrets or copied active-plan sections; report any mismatch before Bead closure.
 
-**Status:** Pending
+**Status:** Complete. Commit `d3cdc4d` pushed and verified (`HEAD == origin/main`, tree clean except this record). Audit verdict: chunks 1–5 all PASS-with-caveat per child `0d97dbdb` (commit scope exact 8 files, no secrets, no venv/site artifacts; pushed state verified; independent strict build exit 0; truth spot-checks pass — release-posture numbers accurate at commit time, upstream advanced since to raw proof `0.0.35` / gameplay assets `0.0.3`, ruled upstream drift per Derrick and tracked as `fiq`). **Role deviation (documented):** the audit child completed its verification but stalled three times on the final mechanical closure step (two model-side failures plus one post-interruption idle); orchestrator closed `cwr`/`vzt`/`scj` directly citing the child's per-check evidence in closure reasons. `div` closed by orchestrator after this record's commit/push verification.
 
 ---
 
 ## Final Results
 
-**Status:** Not started
+**Status:** Complete
 
-*To be filled during execution.*
+**What We Built:** The public web docs site (`aerobeat-web-docs`) now reflects the accepted current AeroBeat web direction: PlayCanvas renderer truth (WebGL2 removed, not aliased), the video/CV media-lifecycle split, the full current repo family (12 built implementation repos including video + content-authoring), vendor topology with mediapipe-only production CV, clearly-labeled planned domains, and release-posture prose matching assembly truth at commit time. Five pages updated, strict build green, all 13 audited drift findings resolved.
+
+**Reference Check:** `REF-01`..`REF-08` all satisfied by the final pages (QA per-finding verification + auditor truth spot-checks). Deliberate deviations: docs state PlayCanvas/current routing while upstream root README and video README carry stale wording (tracked as follow-ups, not edited in this scope); Release Posture version numbers lag upstream by design (Derrick: future passes handle drift) with `fiq` filed to de-pin the wording.
+
+**Commits:**
+- `d3cdc4d` - Refresh web docs for PlayCanvas, video-split, and current vendor truth (5 docs pages + this plan record + findings report + Beads ledger)
+- plan-record follow-up commit (this final update + archive move; see `git log`)
+
+**Lessons Learned:** (1) Local-model child runs are 1-3h wall-clock per role on this stack — parallel coder fan-out wins; expect slow writes. (2) Two model-side child failures (long-prefill kills) both recovered cleanly via reconcile-then-retry/continue with idempotent, chunked, incremental-report prompts — partial results survived every failure. (3) Pinning exact upstream version numbers into contributor docs creates a permanent drift treadmill; prefer policy language (filed as `fiq`). (4) When a verified child completes its checks but stalls on mechanical closure, the orchestrator may close with the child's evidence cited rather than re-delegate — document the deviation.
+
+**Remaining Work (tracked):** `aerobeat-web-docs-fiq` (reword Release Posture without pinned version numbers); upstream README staleness relayed for the owning repos (root README untracked glue — Derrick to decide); `aerobeat-web-video-9jq` (stale WebGL2 wording in video README).
+
+*Completed 2026-09-03 by cookie (orchestrator) — stress-test workload for local-model delegation, executed via the coder/QA/auditor loop.*
