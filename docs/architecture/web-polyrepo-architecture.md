@@ -87,6 +87,12 @@ Current implementation repos:
 
 Web scenes replace Godot scenes with `.testbed/scenes/*.scene.html` built from `aero-*` components. The proving posture from the first wave still applies to testbeds: live camera, video/replay/fixture sources, visible debug state, Boxing and Flow proving scenes, camera selection persistence, and regression tests.
 
+## Versioned Obstacle Boundary
+
+Provider obstacle geometry and AeroBeat gameplay geometry are distinct contracts. Authoring preserves exact v2/v3/v4 evidence as `sourceGeometry`, then applies a format-specific, fixture-locked conversion to mode-neutral `gameplayGeometry` in `aerobeat_top_left_grid`: `(x,y,width,height)` starts at the top-left of the 4×3 grid and positive height extends downward. The derived row-major `gridMask`, continuous wall geometry, and measured-nose collision must agree.
+
+Current authored content uses `normalized_obstacle_v2`, `aerobeat.chart.flow.v3`, song package v3 / `3.0.0`, resolved event v3, and authoring IndexedDB v6. Prior package contracts remain management-only—list, export, and delete—and require source reimport. Migration stamps stored-row provenance without rewriting package bytes or hashes. The shared contract is intentionally not Flow-specific so Boxing can preserve and project the same normalized wall record in its own follow-up work.
+
 ## Release Posture
 
 Repo-local testbeds are for rapid iteration. `aerobeat-web-assembly` owns product release artifacts and proves raw artifact creation and GitHub release submission wiring. Every release it publishes carries a deterministic raw release proof, every prior release byte remains immutable, and a reproducible npm-pack normalize/verify policy guards each new release. The renderer package owns the canonical gameplay asset set pinned at a specific version, and assembly owns versioned environment payloads with hashes; release builds consume those pinned identities rather than loose assets. Current proof and pinned asset versions live in the `aerobeat-web-assembly` release history and the renderer's pinned asset manifest, not in this page.
